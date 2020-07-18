@@ -4,38 +4,41 @@ package core
  * Created by krishan on 18/07/20.
  */
 
-class Cell(val id: Int, private val cellState: CellState) {
+data class Cell(val id: Int, private val value: Value) {
 
     fun open(): State {
-        val correct = cellState !is CellState.BOMB
-        state = State.Open(cellState, correct = correct)
+        val correct = value !is Value.BOMB
+        state = State.Open(value, correct = correct)
         return state
     }
 
     fun flag(): State {
         if (state is State.Open) throw IllegalStateException("Action already performed")
-        val correct = cellState is CellState.BOMB
-        state = State.Close(cellState, correct = correct)
+        val correct = value is Value.BOMB
+        state = State.Close(value, correct = correct)
         return state
     }
 
-    var state: State = State.Close(cellState, null)
+    var state: State = State.Close(value, null)
         private set
 
+    override fun toString(): String {
+        return id.toString()
+    }
 
-    sealed class State(private val cellState: CellState, val correct: Boolean?) {
-        class Close(private val cellState: CellState, correct: Boolean?) :
-            State(cellState, correct)
+    sealed class State(private val value: Value, val correct: Boolean?) {
+        class Close(private val value: Value, correct: Boolean?) :
+            State(value, correct)
 
-        class Open(private val cellState: CellState, correct: Boolean?) :
-            State(cellState, correct)
+        class Open(private val value: Value, correct: Boolean?) :
+            State(value, correct)
 
         open fun getDisplayState(): String {
-            return when (cellState) {
-                CellState.BOMB -> "-1"
-                is CellState.Value -> {
-                    if (cellState.number == 0) return ""
-                    else cellState.number.toString()
+            return when (value) {
+                Value.BOMB -> "-1"
+                is Value.NUMBER -> {
+                    if (value.number == 0) return ""
+                    else value.number.toString()
                 }
 
             }
@@ -44,9 +47,9 @@ class Cell(val id: Int, private val cellState: CellState) {
 
 }
 
-sealed class CellState {
-    object BOMB : CellState()
-    class Value(val number: Int) : CellState()
+sealed class Value {
+    object BOMB : Value()
+    class NUMBER(val number: Int) : Value()
 }
 
 
