@@ -3,11 +3,11 @@ package core
 /**
  * Created by krishan on 18/07/20.
  */
-class MineSweeperBoard(val level: LEVEL, boardGenerator: BoardGenerator) {
+class MineSweeperBoard(level: LEVEL, mineSweeperBoardGenerator: BoardGenerator) {
 
     val noOfCells = level.rows * level.columns
 
-    val cells: Array<Array<Cell>> = boardGenerator.invoke(level)
+    val cells: Array<Array<Cell>> = mineSweeperBoardGenerator.invoke(level)
 
     fun traverseCells(block: (cell: Cell) -> Unit) {
         for (cell in cells) {

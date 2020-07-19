@@ -10,17 +10,17 @@ class MineSweeperBoardTest {
 
     @Test
     fun `test create a Board for different levels`() {
-        val mineSweeperBoard = MineSweeperBoard(LEVEL.BEGINNER, BoardGenerator())
+        val mineSweeperBoard = MineSweeperBoard(LEVEL.BEGINNER, MineSweeperBoardGenerator())
         assertThat(mineSweeperBoard.noOfCells).isEqualTo(100)
         assertThat(mineSweeperBoard.cells.size * mineSweeperBoard.cells[0].size).isEqualTo(100)
 
-        val mineSweeperIntermediate = MineSweeperBoard(LEVEL.INTERMEDIATE, BoardGenerator())
+        val mineSweeperIntermediate = MineSweeperBoard(LEVEL.INTERMEDIATE, MineSweeperBoardGenerator())
         assertThat(mineSweeperIntermediate.noOfCells).isEqualTo(256)
         assertThat(mineSweeperIntermediate.cells.size * mineSweeperIntermediate.cells[0].size).isEqualTo(
             256
         )
 
-        val mineSweeperHard = MineSweeperBoard(LEVEL.HARD, BoardGenerator())
+        val mineSweeperHard = MineSweeperBoard(LEVEL.HARD, MineSweeperBoardGenerator())
         assertThat(mineSweeperHard.noOfCells).isEqualTo(480)
         assertThat(mineSweeperHard.cells.size * mineSweeperHard.cells[0].size).isEqualTo(480)
 
@@ -28,7 +28,7 @@ class MineSweeperBoardTest {
 
     @Test
     fun `test minesweeper cell ids correctly and uniquely assigned`() {
-        val mineSweeperBoard = MineSweeperBoard(LEVEL.HARD, BoardGenerator())
+        val mineSweeperBoard = MineSweeperBoard(LEVEL.HARD, MineSweeperBoardGenerator())
         var i = 0
         print(mineSweeperBoard.cells.contentDeepToString())
         mineSweeperBoard.traverseCells {
@@ -39,9 +39,8 @@ class MineSweeperBoardTest {
 
     @Test
     fun `print minesweeper board`() {
-        val mineSweeperBoard = MineSweeperBoard(LEVEL.BEGINNER, BoardGenerator())
+        val mineSweeperBoard = MineSweeperBoard(LEVEL.BEGINNER, MineSweeperBoardGenerator())
         mineSweeperBoard.traverseCells { cell ->
-            print(" ")
             cell.prettyPrint()
             if ((cell.id + 1) % LEVEL.BEGINNER.columns == 0) println()
         }
@@ -54,7 +53,11 @@ class MineSweeperBoardTest {
         } else if (displayState == "-1") {
             "X"
         } else displayState
-        print("|$prettyState|")
+        print("$prettyState|")
+    }
+
+    @Test
+    fun `test `() {
     }
 
 }
