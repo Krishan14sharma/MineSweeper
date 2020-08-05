@@ -36,15 +36,26 @@ class MineSweeperBoard(
             mineSweeperBoardListener?.inCorrectMove(cell)
             return
         }
-        // todo improve this zero
+        // todo improve this zero state matching
         if (open.getDisplayState() == "") {
-
+            val listCells = openNeighbours(cell)
+            mineSweeperBoardListener?.correctMove(cell, listCells)
+        } else {
+            mineSweeperBoardListener?.correctMove(cell, emptyList())
         }
     }
 
-    private fun openNeighbours(cell: Cell) {
-        // clicked cell is 0
-        cell.neighbourIds(level.rows, level.columns)
+    private fun openNeighbours(cell: Cell): List<Cell> {
+
+        // use bfs to traverse each element and add if zero
+        if (cell.state.getDisplayState() == "") {
+            // 0
+            val neighbourIds = cell.neighbourIds(level.rows, level.columns)
+            neighbourIds.forEachIndexed { index, id ->
+                val (row, column) = mineSweeperBoardGenerator.getCellIndices(id, level.columns)
+                cells[row][column]
+            }
+        }
     }
 
     fun flag() {

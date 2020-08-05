@@ -7,6 +7,7 @@ package core
 data class Cell(val id: Int, private val value: Value) {
 
     fun open(): State {
+        if (state is State.Open) throw IllegalStateException("Already opened this cell")
         val correct = value !is Value.BOMB
         state = State.Open(value, correct = correct)
         return state
