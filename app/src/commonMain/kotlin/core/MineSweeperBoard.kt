@@ -46,16 +46,27 @@ class MineSweeperBoard(
     }
 
     private fun openNeighbours(cell: Cell): List<Cell> {
-
-        // use bfs to traverse each element and add if zero
-        if (cell.state.getDisplayState() == "") {
-            // 0
-            val neighbourIds = cell.neighbourIds(level.rows, level.columns)
-            neighbourIds.forEachIndexed { index, id ->
-                val (row, column) = mineSweeperBoardGenerator.getCellIndices(id, level.columns)
-                cells[row][column]
+        val openedCells: MutableList<Cell> = mutableListOf()
+        fun openNeighbours(cell: Cell) {
+            val neighbourIds = cell.neighbouringIds(level.rows, level.columns)
+            for (pair in neighbourIds.map { id ->
+                mineSweeperBoardGenerator.getCellIndices(id, level.columns)
+            }) {
+                val (row, column) = pair
+                val neighbourCell = cells[row][column]
+                if (neighbourCell.state is Cell.State.Close &&
+                    neighbourCell.state.getDisplayState() == ""
+                ) {
+                    neighbourCell.open()
+                    openedCells.add(neighbourCell)
+                    openNeighbours(cell)
+                }
             }
         }
+        // use bfs to traverse each element and add if zero
+        // 0
+        openNeighbours(cell)
+        return openedCells
     }
 
     fun flag() {

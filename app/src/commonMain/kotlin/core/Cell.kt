@@ -6,6 +6,9 @@ package core
 
 data class Cell(val id: Int, private val value: Value) {
 
+    var state: State = State.Close(value, null)
+        private set
+
     fun open(): State {
         if (state is State.Open) throw IllegalStateException("Already opened this cell")
         val correct = value !is Value.BOMB
@@ -19,9 +22,6 @@ data class Cell(val id: Int, private val value: Value) {
         state = State.Close(value, correct = correct)
         return state
     }
-
-    var state: State = State.Close(value, null)
-        private set
 
     override fun toString(): String {
         return id.toString()

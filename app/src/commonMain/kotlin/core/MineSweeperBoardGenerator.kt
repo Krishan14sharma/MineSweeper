@@ -48,7 +48,7 @@ internal open class MineSweeperBoardGenerator : BoardGenerator {
     internal fun countNeighbouringBombs(bombIds: List<Int>, id: Int, columnSize: Int, rowSize: Int)
             : Pair<Int, List<Int>> {
         val cell = Cell(id, Value.NUMBER(0))
-        val arrayOfNeighbours = cell.neighbourIds(columnSize = columnSize, rowSize = rowSize)
+        val arrayOfNeighbours = cell.neighbouringIds(columnSize = columnSize, rowSize = rowSize)
 
         var totalBombs = 0
         val bombsNear = mutableListOf<Int>()
@@ -62,7 +62,7 @@ internal open class MineSweeperBoardGenerator : BoardGenerator {
     }
 }
 
-internal fun Cell.neighbourIds(rowSize: Int, columnSize: Int): List<Int> {
+internal fun Cell.neighbouringIds(rowSize: Int, columnSize: Int): List<Int> {
     //neighbours to right
     val r1 = id + 1
     val r2 = id - columnSize + 1

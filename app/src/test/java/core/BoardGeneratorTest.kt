@@ -24,6 +24,51 @@ class MineSweeperBoardGeneratorTest {
         assertThat(countBombs).isEqualTo(LEVEL.BEGINNER.bombs)
     }
 
+    @Test
+    fun `test value inside cells is correct`() {
+        val generator = MockMineSweeperBoardGenerator()
+        val cells = generator.invoke(LEVEL.BEGINNER)
+        val firstRow = arrayOf(
+            "-1", "-1", "-1", "1", "1", "-1", "1", "1", "-1", "1"
+        )
+        val secondRow = arrayOf(
+            "2", "3", "2", "1", "1", "1", "1", "1", "1", "1"
+        )
+        val thirdRow = arrayOf(
+            "", "", "", "", "", "1", "2", "2", "1", ""
+        )
+        val fourthRow = arrayOf(
+            "", "", "1", "1", "1", "1", "-1", "-1", "1", ""
+        )
+        val fifthRow = arrayOf(
+            "", "", "1", "-1", "1", "1", "3", "3", "2", ""
+        )
+        val sixthRow = arrayOf(
+            "", "", "1", "1", "1", "", "1", "-1", "2", "1"
+        )
+        val seventhRow = arrayOf(
+            "1", "1", "", "", "", "", "1", "1", "2", "-1"
+        )
+        val eighthRow = arrayOf(
+            "-1", "1", "", "1", "1", "1", "", "", "1", "1"
+        )
+        val nineRow = arrayOf(
+            "3", "3", "1", "1", "-1", "1", "", "1", "1", "1"
+        )
+        val tenthRow = arrayOf(
+            "-1", "-1", "1", "1", "1", "1", "", "1", "-1", "1"
+        )
+        assertThat(cells[0].map { it.state.getDisplayState() }).containsExactly(*firstRow)
+        assertThat(cells[1].map { it.state.getDisplayState() }).containsExactly(*secondRow)
+        assertThat(cells[2].map { it.state.getDisplayState() }).containsExactly(*thirdRow)
+        assertThat(cells[3].map { it.state.getDisplayState() }).containsExactly(*fourthRow)
+        assertThat(cells[4].map { it.state.getDisplayState() }).containsExactly(*fifthRow)
+        assertThat(cells[5].map { it.state.getDisplayState() }).containsExactly(*sixthRow)
+        assertThat(cells[6].map { it.state.getDisplayState() }).containsExactly(*seventhRow)
+        assertThat(cells[7].map { it.state.getDisplayState() }).containsExactly(*eighthRow)
+        assertThat(cells[8].map { it.state.getDisplayState() }).containsExactly(*nineRow)
+        assertThat(cells[9].map { it.state.getDisplayState() }).containsExactly(*tenthRow)
+    }
 
     /***
      *0   1   2   3   4   5   6   7   8   9
@@ -120,7 +165,7 @@ class MineSweeperBoardGeneratorTest {
 
 
     @Test
-    fun `test encode and decode id `() {
+    fun `test correct cellId are generated for a particular cell `() {
         val mineSweeperBoardGenerator = MineSweeperBoardGenerator()
         val generateUniqueId = mineSweeperBoardGenerator.generateUniqueId(
             rowIndex = 1, columnIndex = 0, columnSize = 10
@@ -199,10 +244,10 @@ class MineSweeperBoardGeneratorTest {
         val level = LEVEL.BEGINNER
         val cells = generator.invoke(level)
         val cell = cells[0][9]
-        val neighbours = cell.neighbourIds(level.rows, level.columns)
+        val neighbours = cell.neighbouringIds(level.rows, level.columns)
         assertThat(neighbours).containsExactlyInAnyOrder(8, 18, 19)
         val cell2 = cells[3][2]
-        val neighbours2 = cell2.neighbourIds(level.rows, level.columns)
+        val neighbours2 = cell2.neighbouringIds(level.rows, level.columns)
         assertThat(neighbours2).containsExactlyInAnyOrder(31, 21, 41, 33, 23, 43, 42, 22)
     }
 

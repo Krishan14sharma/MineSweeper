@@ -22,7 +22,7 @@ class MineSweeperBoardTest {
         )
 
         val mineSweeperHard = MineSweeperBoard(LEVEL.HARD, MineSweeperBoardGenerator())
-        assertThat(mineSweeperHard.noOfCells).isEqualTo(480)
+        assertThat(mineSweeperHard.noOfCells).isEqualTo        (480)
         assertThat(mineSweeperHard.getCells().size).isEqualTo(480)
 
     }
@@ -59,7 +59,7 @@ class MineSweeperBoardTest {
     @Test
     fun `test user opening a bomb cell notifies user about the wrong move`() {
         val mineSweeperBoardGenerator = MockMineSweeperBoardGenerator()
-        val mineSweeperBoard = MineSweeperBoard(LEVEL.INTERMEDIATE, mineSweeperBoardGenerator)
+        val mineSweeperBoard = MineSweeperBoard(LEVEL.BEGINNER, mineSweeperBoardGenerator)
         val cells = mineSweeperBoard.getCells()
         val bombIds = mineSweeperBoardGenerator.bombIds
         val openingCellId = bombIds[0]
@@ -80,7 +80,7 @@ class MineSweeperBoardTest {
     @Test
     fun `test user opening a number cell other than 0`() {
         val mineSweeperBoardGenerator = MockMineSweeperBoardGenerator()
-        val mineSweeperBoard = MineSweeperBoard(LEVEL.INTERMEDIATE, mineSweeperBoardGenerator)
+        val mineSweeperBoard = MineSweeperBoard(LEVEL.BEGINNER, mineSweeperBoardGenerator)
         val cells = mineSweeperBoard.getCells()
         val bombIds = mineSweeperBoardGenerator.bombIds
         val openingCellId = cells.filter { !bombIds.contains(it.id) }[0].id
@@ -101,7 +101,7 @@ class MineSweeperBoardTest {
     @Test
     fun `test user opening a 0 cell`() {
         val mineSweeperBoardGenerator = MockMineSweeperBoardGenerator()
-        val mineSweeperBoard = MineSweeperBoard(LEVEL.INTERMEDIATE, mineSweeperBoardGenerator)
+        val mineSweeperBoard = MineSweeperBoard(LEVEL.BEGINNER, mineSweeperBoardGenerator)
         val cells = mineSweeperBoard.getCells()
         val bombIds = mineSweeperBoardGenerator.bombIds
         val openingCellId = 20
@@ -112,9 +112,10 @@ class MineSweeperBoardTest {
 
             override fun correctMove(cell: Cell, openCells: List<Cell>) {
                 assertThat(cell.id).isEqualTo(openingCellId)
-                val map: List<Int> = openCells.map { it.id }
-                print(map.toString())
-                assertThat(map).containsExactlyInAnyOrder(3, 13, 20, 21, 22, 23, 30, 31, 40, 41, 50, 51)
+                val openCellIds: List<Int> = openCells.map { it.id }
+                print(openCellIds.toString())
+                assertThat(openCellIds)
+                    .containsExactlyInAnyOrder(21, 22, 23, 24, 30, 31, 40, 41, 50, 51)
             }
         }
         mineSweeperBoard.mineSweeperBoardListener = value
