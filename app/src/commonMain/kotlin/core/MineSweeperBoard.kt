@@ -21,8 +21,8 @@ class MineSweeperBoard(
 
 
     fun traverseCells(block: (cell: Cell) -> Unit) {
-        for (cell in cells) {
-            for (cell in cell) {
+        for (arrayOfCells in cells) {
+            for (cell in arrayOfCells) {
                 block(cell)
             }
         }
@@ -33,6 +33,7 @@ class MineSweeperBoard(
         val cell = cells[row][column]
         val open = cell.open()
         if (!open.correct!!) {
+            // todo send flagged wrong moves
             mineSweeperBoardListener?.inCorrectMove(cell)
             return
         }
@@ -59,7 +60,7 @@ class MineSweeperBoard(
                 ) {
                     neighbourCell.open()
                     openedCells.add(neighbourCell)
-                    openNeighbours(cell)
+                    openNeighbours(neighbourCell)
                 }
             }
         }
@@ -69,14 +70,23 @@ class MineSweeperBoard(
         return openedCells
     }
 
-    fun flag() {
-
+    fun flag(cellId: Int): Cell {
+        val (row, column) = mineSweeperBoardGenerator.getCellIndices(cellId, level.columns)
+        val cell = cells[row][column]
+        cell.flag()
+        return cell
     }
 
+    fun unFlag(cellId: Int): Cell {
+        val (row, column) = mineSweeperBoardGenerator.getCellIndices(cellId, level.columns)
+        val cell = cells[row][column]
+        cell.unFlag()
+        return cell
+    }
 }
 
 interface MineSweeperBoardListener {
-    fun inCorrectMove(cell: Cell)
+    fun inCorrectMove(cell: Cell, inCorrectFlags: List<Cell> = emptyList())
     fun correctMove(cell: Cell, openCells: List<Cell>)
 }
 

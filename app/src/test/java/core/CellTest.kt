@@ -88,4 +88,12 @@ class CellTest {
 
     }
 
+    @Test
+    fun `test flag cell unFlag`() {
+        val cellView = Cell(0, Value.NUMBER(4))
+        val state = cellView.flag()
+        assert(state.correct == false)
+        val unFlagState = cellView.unFlag()
+        assert(unFlagState.correct == true)
+    }
 }

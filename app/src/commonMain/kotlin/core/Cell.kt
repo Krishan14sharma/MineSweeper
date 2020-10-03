@@ -23,6 +23,12 @@ data class Cell(val id: Int, private val value: Value) {
         return state
     }
 
+    fun unFlag(): State {
+        if (state is State.Open) throw IllegalStateException("Action already performed")
+        state = State.Close(value, correct = true)
+        return state
+    }
+
     override fun toString(): String {
         return id.toString()
     }
