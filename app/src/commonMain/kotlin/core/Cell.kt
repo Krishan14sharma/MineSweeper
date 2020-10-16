@@ -1,11 +1,14 @@
 package core
 
+import kotlin.js.JsName
+
 /**
  * Created by krishan on 18/07/20.
  */
 
-data class Cell(val id: Int, private val value: Value) {
+data class Cell(val id: Int, @JsName("value") private val value: Value) {
 
+    @JsName("state")
     var state: State = State.Close(value, null)
         private set
 
@@ -33,6 +36,7 @@ data class Cell(val id: Int, private val value: Value) {
         return id.toString()
     }
 
+    @JsName("State")
     sealed class State(private val value: Value, val correct: Boolean?) {
         class Close(private val value: Value, correct: Boolean?) :
             State(value, correct)

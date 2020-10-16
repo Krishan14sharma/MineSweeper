@@ -19,6 +19,9 @@ class MineSweeperBoard(
         return cellList
     }
 
+    fun getCellGrid(): Array<Array<Cell>> {
+        return cells
+    }
 
     fun traverseCells(block: (cell: Cell) -> Unit) {
         for (arrayOfCells in cells) {
