@@ -11,7 +11,6 @@ class CellTest {
     fun `test create cell initial state`() {
         val cellView = Cell(0, Value.BOMB)
         assert(cellView.state is Cell.State.Close)
-        assert(cellView.state.correct == null)
     }
 
     @Test
@@ -25,7 +24,7 @@ class CellTest {
     fun `test cell flag does not change cell state`() {
         val cellView = Cell(0, Value.BOMB)
         cellView.flag()
-        assert(cellView.state is Cell.State.Close)
+        assert(cellView.state is Cell.State.Flag)
     }
 
     @Test
@@ -93,7 +92,5 @@ class CellTest {
         val cellView = Cell(0, Value.NUMBER(4))
         val state = cellView.flag()
         assert(state.correct == false)
-        val unFlagState = cellView.unFlag()
-        assert(unFlagState.correct == true)
     }
 }

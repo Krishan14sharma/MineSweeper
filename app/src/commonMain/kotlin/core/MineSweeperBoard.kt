@@ -40,15 +40,15 @@ class MineSweeperBoard(
         val open = cell.open()
         if (!open.correct!!) {
             // todo send flagged wrong moves
-            mineSweeperBoardListener?.inCorrectMove(cell)
+            mineSweeperBoardListener?.onUnsafeMove(cell)
             return
         }
         // todo improve this zero state matching
         if (open.getDisplayState() == "") {
             val listCells = openNeighbours(cell)
-            mineSweeperBoardListener?.correctMove(cell, listCells)
+            mineSweeperBoardListener?.onSafeMove(cell, listCells)
         } else {
-            mineSweeperBoardListener?.correctMove(cell, emptyList())
+            mineSweeperBoardListener?.onSafeMove(cell, emptyList())
         }
     }
 
@@ -76,6 +76,7 @@ class MineSweeperBoard(
         return openedCells
     }
 
+    // todo remove return type
     @JsName("flag")
     fun flag(cellId: Int): Cell {
         val (row, column) = mineSweeperBoardGenerator.getCellIndices(cellId, level.columns)
@@ -84,6 +85,7 @@ class MineSweeperBoard(
         return cell
     }
 
+    // todo remove return type
     @JsName("unFlag")
     fun unFlag(cellId: Int): Cell {
         val (row, column) = mineSweeperBoardGenerator.getCellIndices(cellId, level.columns)
@@ -94,11 +96,11 @@ class MineSweeperBoard(
 }
 
 interface MineSweeperBoardListener {
-    @JsName("inCorrectMove")
-    fun inCorrectMove(cell: Cell, inCorrectFlags: List<Cell> = emptyList())
+    @JsName("onUnsafeMove")
+    fun onUnsafeMove(cell: Cell, inCorrectFlags: List<Cell> = emptyList())
 
-    @JsName("correctMove")
-    fun correctMove(cell: Cell, openCells: List<Cell>)
+    @JsName("onSafeMove")
+    fun onSafeMove(cell: Cell, openCells: List<Cell>)
 }
 
 

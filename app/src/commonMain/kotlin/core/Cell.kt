@@ -9,27 +9,27 @@ import kotlin.js.JsName
 data class Cell(val id: Int, @JsName("value") private val value: Value) {
 
     @JsName("state")
-    var state: State = State.Close(value, null)
+    var state: State = State.Close(value)
         private set
 
-    fun open(): State {
+    fun open(): State.Open {
         if (state is State.Open) throw IllegalStateException("Already opened this cell")
         val correct = value !is Value.BOMB
         state = State.Open(value, correct = correct)
-        return state
+        return state as State.Open
     }
 
-    fun flag(): State {
+    fun flag(): State.Flag {
         if (state is State.Open) throw IllegalStateException("Action already performed")
         val correct = value is Value.BOMB
-        state = State.Close(value, correct = correct)
-        return state
+        state = State.Flag(value, correct = correct)
+        return state as State.Flag
     }
 
-    fun unFlag(): State {
+    fun unFlag(): State.Close {
         if (state is State.Open) throw IllegalStateException("Action already performed")
-        state = State.Close(value, correct = true)
-        return state
+        state = State.Close(value)
+        return state as State.Close
     }
 
     override fun toString(): String {
@@ -37,12 +37,15 @@ data class Cell(val id: Int, @JsName("value") private val value: Value) {
     }
 
     @JsName("State")
-    sealed class State(private val value: Value, val correct: Boolean?) {
-        class Close(private val value: Value, correct: Boolean?) :
-            State(value, correct)
+    sealed class State(private val value: Value) {
+        class Close(private val value: Value) :
+            State(value)
 
-        class Open(private val value: Value, correct: Boolean?) :
-            State(value, correct)
+        class Open(private val value: Value, val correct: Boolean?) :
+            State(value)
+
+        class Flag(private val value: Value, val correct: Boolean?) :
+            State(value)
 
         open fun getDisplayState(): String {
             return when (value) {

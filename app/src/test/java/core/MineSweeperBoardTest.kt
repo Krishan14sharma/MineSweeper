@@ -1,6 +1,7 @@
 package core
 
 import core.Cell.State.Close
+import core.Cell.State.Flag
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
@@ -65,11 +66,11 @@ class MineSweeperBoardTest {
         val bombIds = mineSweeperBoardGenerator.bombIds
         val openingCellId = bombIds[0]
         val value = object : MineSweeperBoardListener {
-            override fun inCorrectMove(cell: Cell, inCorrectFlags: List<Cell>) {
+            override fun onUnsafeMove(cell: Cell, inCorrectFlags: List<Cell>) {
                 assertThat(cell.id).isEqualTo(openingCellId)
             }
 
-            override fun correctMove(cell: Cell, openCells: List<Cell>) {
+            override fun onSafeMove(cell: Cell, openCells: List<Cell>) {
                 assert(false)
             }
 
@@ -86,11 +87,11 @@ class MineSweeperBoardTest {
         val bombIds = mineSweeperBoardGenerator.bombIds
         val openingCellId = cells.filter { !bombIds.contains(it.id) }[0].id
         val value = object : MineSweeperBoardListener {
-            override fun inCorrectMove(cell: Cell, inCorrectFlags: List<Cell>) {
+            override fun onUnsafeMove(cell: Cell, inCorrectFlags: List<Cell>) {
                 assert(false)
             }
 
-            override fun correctMove(cell: Cell, openCells: List<Cell>) {
+            override fun onSafeMove(cell: Cell, openCells: List<Cell>) {
                 assertThat(cell.id).isEqualTo(openingCellId)
                 assertThat(openCells).isEmpty()
             }
@@ -105,11 +106,11 @@ class MineSweeperBoardTest {
         val mineSweeperBoard = MineSweeperBoard(LEVEL.BEGINNER, mineSweeperBoardGenerator)
         val openingCellId = 20
         val value = object : MineSweeperBoardListener {
-            override fun inCorrectMove(cell: Cell, inCorrectFlags: List<Cell>) {
+            override fun onUnsafeMove(cell: Cell, inCorrectFlags: List<Cell>) {
                 assert(false)
             }
 
-            override fun correctMove(cell: Cell, openCells: List<Cell>) {
+            override fun onSafeMove(cell: Cell, openCells: List<Cell>) {
                 assertThat(cell.id).isEqualTo(openingCellId)
                 val openCellIds: List<Int> = openCells.map { it.id }
                 print(openCellIds.toString())
@@ -135,12 +136,10 @@ class MineSweeperBoardTest {
         val flaggingCellId = 0
         val flag = mineSweeperBoard.flag(flaggingCellId)
         assertThat(flag.id).isEqualTo(flaggingCellId)
-        assertThat(flag.state).isInstanceOf(Close::class.java)
-        assertThat(flag.state.correct).isTrue()
+        assertThat(flag.state).isInstanceOf(Flag::class.java)
         val unFlag = mineSweeperBoard.unFlag(flaggingCellId)
         assertThat(unFlag.id).isEqualTo(flaggingCellId)
         assertThat(unFlag.state).isInstanceOf(Close::class.java)
-        assertThat(unFlag.state.correct).isTrue()
     }
 
     @Test
@@ -150,8 +149,7 @@ class MineSweeperBoardTest {
         val flaggingCellId = 4
         val flag = mineSweeperBoard.flag(flaggingCellId)
         assertThat(flag.id).isEqualTo(flaggingCellId)
-        assertThat(flag.state).isInstanceOf(Close::class.java)
-        assertThat(flag.state.correct).isFalse()
+        assertThat(flag.state).isInstanceOf(Flag::class.java)
     }
 
     @Test
@@ -163,6 +161,5 @@ class MineSweeperBoardTest {
         val unFlag = mineSweeperBoard.unFlag(flaggingCellId)
         assertThat(unFlag.id).isEqualTo(flaggingCellId)
         assertThat(unFlag.state).isInstanceOf(Close::class.java)
-        assertThat(unFlag.state.correct).isTrue()
     }
 }
