@@ -82,6 +82,7 @@ class MineSweeperBoard(
         val (row, column) = mineSweeperBoardGenerator.getCellIndices(cellId, level.columns)
         val cell = cells[row][column]
         cell.flag()
+        mineSweeperBoardListener?.onSafeMove(cell, emptyList())
         return cell
     }
 
@@ -91,6 +92,7 @@ class MineSweeperBoard(
         val (row, column) = mineSweeperBoardGenerator.getCellIndices(cellId, level.columns)
         val cell = cells[row][column]
         cell.unFlag()
+        mineSweeperBoardListener?.onSafeMove(cell, emptyList())
         return cell
     }
 }
