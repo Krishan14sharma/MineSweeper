@@ -1,5 +1,7 @@
 package core
 
+import kotlin.js.JsName
+
 /**
  * Created by krishan on 18/07/20.
  */
@@ -31,6 +33,7 @@ class MineSweeperBoard(
         }
     }
 
+    @JsName("open")
     fun open(cellId: Int) {
         val (row, column) = mineSweeperBoardGenerator.getCellIndices(cellId, level.columns)
         val cell = cells[row][column]
@@ -73,6 +76,7 @@ class MineSweeperBoard(
         return openedCells
     }
 
+    @JsName("flag")
     fun flag(cellId: Int): Cell {
         val (row, column) = mineSweeperBoardGenerator.getCellIndices(cellId, level.columns)
         val cell = cells[row][column]
@@ -80,6 +84,7 @@ class MineSweeperBoard(
         return cell
     }
 
+    @JsName("unFlag")
     fun unFlag(cellId: Int): Cell {
         val (row, column) = mineSweeperBoardGenerator.getCellIndices(cellId, level.columns)
         val cell = cells[row][column]
@@ -89,7 +94,10 @@ class MineSweeperBoard(
 }
 
 interface MineSweeperBoardListener {
+    @JsName("inCorrectMove")
     fun inCorrectMove(cell: Cell, inCorrectFlags: List<Cell> = emptyList())
+
+    @JsName("correctMove")
     fun correctMove(cell: Cell, openCells: List<Cell>)
 }
 
